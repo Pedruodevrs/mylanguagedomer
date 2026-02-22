@@ -1,60 +1,65 @@
 import os
+import sys
+
+def limpar_tela():
+    # Limpa o console dependendo do sistema (Windows ou Linux/Android)
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 def interpretador_dom():
-    # Nome do arquivo que contém os seus comandos
     arquivo_script = "script.dom"
 
-    # Verifica se o seu script existe na pasta
+    # 1. Verifica se o arquivo existe
     if not os.path.exists(arquivo_script):
-        print(f"❌ ERRO: O arquivo '{arquivo_script}' não foi encontrado!")
-        print("Crie um arquivo chamado script.dom na mesma pasta deste main.py.")
+        print(f"❌ ERRO: Arquivo '{arquivo_script}' não encontrado na pasta atual.")
         return
 
-    print("\n" + "="*40)
-    print("☢️  DOMER OS - EXECUTANDO VIA TERMINAL ☢️")
-    print("="*40 + "\n")
+    limpar_tela()
+    print("="*50)
+    print("☢️  DOMER OS - INTERPRETADOR DE SCRIPT v2.0 ☢️")
+    print(f"📂 Rodando: {os.path.abspath(arquivo_script)}")
+    print("="*50 + "\n")
 
     try:
         with open(arquivo_script, "r", encoding="utf-8") as f:
-            linhas = f.readlines()
+            # Lemos todas as linhas de uma vez
+            instrucoes = f.readlines()
             
-            for i, linha in enumerate(linhas):
+            for num_linha, linha in enumerate(instrucoes, 1):
                 linha = linha.strip()
                 
-                # Pula linhas vazias ou comentários (que começam com #)
+                # Pula linhas vazias ou que são apenas comentários
                 if not linha or linha.startswith("#"):
                     continue
-                
-                # COMANDO: falar
-                if linha.startswith("falar"):
-                    try:
-                        # Extrai o texto que está entre aspas
-                        conteudo = linha.split('"')[1]
-                        print(f"📢 [SAÍDA]: {conteudo}")
-                    except IndexError:
-                        print(f"⚠️  ERRO DE SINTAXE (Linha {i+1}): Use falar \"seu texto\"")
 
-                # COMANDO: calcular
+                # --- COMANDO: falar ---
+                if linha.startswith("falar"):
+                    if '"' in linha:
+                        msg = linha.split('"')[1]
+                        print(f"📢 [SAÍDA]: {msg}")
+                    else:
+                        print(f"⚠️  ERRO (Linha {num_linha}): Use aspas para falar. Ex: falar \"olá\"")
+
+                # --- COMANDO: calcular ---
                 elif linha.startswith("calcular"):
                     try:
-                        # Remove a palavra 'calcular' e faz a conta
-                        expressao = linha.replace("calcular", "").strip()
-                        resultado = eval(expressao)
-                        print(f"🔢 [CÁLCULO]: {expressao} = {resultado}")
+                        conta = linha.replace("calcular", "").strip()
+                        # O eval() processa a matemática básica
+                        resultado = eval(conta)
+                        print(f"🔢 [CÁLCULO]: {conta} = {resultado}")
                     except Exception as e:
-                        print(f"⚠️  ERRO DE CÁLCULO (Linha {i+1}): {e}")
-                
-                # COMANDO DESCONHECIDO
+                        print(f"⚠️  ERRO (Linha {num_linha}): Cálculo inválido -> {e}")
+
+                # --- COMANDO NÃO RECONHECIDO ---
                 else:
-                    print(f"❓ COMANDO NÃO RECONHECIDO (Linha {i+1}): {linha}")
+                    print(f"❓ COMANDO DESCONHECIDO (Linha {num_linha}): {linha}")
 
     except Exception as e:
-        print(f"❌ ERRO CRÍTICO AO LER O SCRIPT: {e}")
+        print(f"❌ ERRO AO PROCESSAR O ARQUIVO: {e}")
 
-    print("\n" + "="*40)
-    print("✅ EXECUÇÃO FINALIZADA COM SUCESSO")
-    print("="*40 + "\n")
+    print("\n" + "="*50)
+    print("✅ EXECUÇÃO FINALIZADA")
+    print("="*50)
 
 if __name__ == "__main__":
     interpretador_dom()
-                                                           
+    
