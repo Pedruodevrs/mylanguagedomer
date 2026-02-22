@@ -2,13 +2,13 @@ import os
 import sys
 
 def limpar_tela():
-    # Limpa o console dependendo do sistema (Windows ou Linux/Android)
+    
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def interpretador_dom():
     arquivo_script = "script.dom"
 
-    # 1. Verifica se o arquivo existe
+    
     if not os.path.exists(arquivo_script):
         print(f"❌ ERRO: Arquivo '{arquivo_script}' não encontrado na pasta atual.")
         return
@@ -21,7 +21,7 @@ def interpretador_dom():
 
     try:
         with open(arquivo_script, "r", encoding="utf-8") as f:
-            # Lemos todas as linhas de uma vez
+            
             instrucoes = f.readlines()
             
             for num_linha, linha in enumerate(instrucoes, 1):
