@@ -3,7 +3,6 @@ import sys
 import os
 
 def run():
-
     target = sys.argv[1] if len(sys.argv) > 1 else None
     
     if not target:
@@ -25,12 +24,10 @@ def run():
         while i < len(linhas):
             l = linhas[i].strip()
             
-            # Pula linhas vazias ou comentários
             if not l or l.startswith("#"):
                 i += 1
                 continue
             
-            # COMANDO: falar
             if l.startswith("falar"):
                 try:
                     content = l.split('"')[1]
@@ -40,7 +37,6 @@ def run():
                 except IndexError:
                     print(f"Erro na linha {i+1}: Faltam aspas no comando falar.")
             
-            # COMANDO: perguntar
             elif l.startswith("perguntar"):
                 try:
                     msg = l.split('"')[1]
@@ -50,12 +46,13 @@ def run():
                 except:
                     print(f"Erro na linha {i+1}: Sintaxe do comando perguntar inválida.")
 
-            # COMANDO: calcular
             elif l.startswith("calcular"):
-                expr = l.replace("calcular", "").strip()
-                print(eval(expr, {}, vars_dom))
+                try:
+                    expr = l.replace("calcular", "").strip()
+                    print(eval(expr, {}, vars_dom))
+                except:
+                    print(f"Erro na linha {i+1}: Erro no cálculo.")
 
-            # COMANDO: definir
             elif l.startswith("definir"):
                 try:
                     parts = l.replace("definir", "").strip().split("=")
@@ -64,7 +61,6 @@ def run():
                 except:
                     print(f"Erro na linha {i+1}: Erro na definição de variável.")
 
-            # COMANDO: se / fimse
             elif l.startswith("se"):
                 condicao = l.replace("se", "").strip()
                 try:
@@ -81,4 +77,4 @@ def run():
 
 if __name__ == "__main__":
     run()
-                
+    
