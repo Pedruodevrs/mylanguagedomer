@@ -1,6 +1,0 @@
-{
-  "rewriteConfigs": true,
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/api/main" }
-  ]
-}
